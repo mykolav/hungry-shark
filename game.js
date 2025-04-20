@@ -116,10 +116,10 @@ class Obstacle {
     }
 
     draw() {
-        // Top obstacle - draw from 0 to this.top, inverted
+        // Original drawing code
         ctx.save();
         ctx.translate(this.x + this.width, this.top);
-        ctx.scale(-1, -1);  // Flip both horizontally and vertically for top coral
+        ctx.scale(-1, -1);
         ctx.drawImage(
             this.coralImage,
             0,
@@ -129,7 +129,6 @@ class Obstacle {
         );
         ctx.restore();
 
-        // Bottom obstacle - draw from bottom to this.bottom
         ctx.drawImage(
             this.coralImage,
             this.x,
@@ -332,14 +331,18 @@ function init() {
 }
 
 function checkCollision(shark, obstacle) {
-    // Define collision boundaries with some padding for smoother gameplay
-    const sharkLeft = shark.x + 10;
-    const sharkRight = shark.x + shark.width - 10;
+    // Calculate the actual visual width of the shark based on aspect ratio
+    const aspectRatio = shark.sharkImage.width / shark.sharkImage.height;
+    const sharkDrawWidth = shark.height * aspectRatio;
+    
+    // Define collision boundaries to match the visual boundaries
+    const sharkLeft = shark.x + (shark.width - sharkDrawWidth) / 2 + 10;
+    const sharkRight = shark.x + (shark.width + sharkDrawWidth) / 2 - 10;
     const sharkTop = shark.y + 5;
     const sharkBottom = shark.y + shark.height - 5;
 
-    // Check if shark is within obstacle's x-range
-    if (sharkRight > obstacle.x && sharkLeft < obstacle.x + obstacle.width) {
+    // Check if shark is within obstacle's x-range with a tighter collision box
+    if (sharkRight > obstacle.x + 5 && sharkLeft < obstacle.x + obstacle.width - 5) {
         // Check if shark hits top or bottom obstacle
         if (sharkTop < obstacle.top || sharkBottom > obstacle.bottom) {
             return true;
