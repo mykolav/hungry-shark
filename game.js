@@ -34,8 +34,6 @@ canvas.height = 600;
 // -----------------------------
 // Game State Variables
 // -----------------------------
-let assetsLoaded = 0;
-const requiredAssets = 3;
 let shark;
 let obstacles = [];
 let seaweed;
@@ -81,13 +79,6 @@ function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
 function getRandomCelebrationPhrase() {
     const index = Math.floor(Math.random() * CELEBRATION_PHRASES.length);
     return CELEBRATION_PHRASES[index];
-}
-
-function startGameWhenAssetsLoaded() {
-    assetsLoaded++;
-    if (assetsLoaded === requiredAssets) {
-        init();
-    }
 }
 
 // -----------------------------
@@ -644,3 +635,13 @@ seaweed = new Seaweed();
 const tempObstacle = new Obstacle();
 tempObstacle.coralImage.onload = startGameWhenAssetsLoaded;
 bubbles = Array(BUBBLE_COUNT).fill(null).map(() => new Bubble());
+
+const REQUIRED_ASSETS = 3;
+let assetsLoaded = 0;
+
+function startGameWhenAssetsLoaded() {
+    assetsLoaded++;
+    if (assetsLoaded === REQUIRED_ASSETS) {
+        init();
+    }
+}
